@@ -13,9 +13,7 @@ module.exports = merge.smart(getBaseConfig(__dirname), {
     __dirname: false,
     __filename: false,
   },
-  entry: [
-    pkgpath('src/view/styles/main.scss'),
-  ],
+  entry: [pkgpath('src/view/styles/main.scss')],
   output: {
     filename: 'bundle.js',
     path: pkgpath('src-babel'),
@@ -27,12 +25,29 @@ module.exports = merge.smart(getBaseConfig(__dirname), {
     bindings: 'commonjs bindings',
     serialport: 'commonjs serialport',
   },
+  module: {
+    rules: [
+      {
+        include: [/node_modules\/mkdirp/],
+        test: /\.js$/,
+        loader: 'babel-loader',
+        options: {
+          presets: ['es2015'],
+          plugins: ['transform-object-rest-spread'],
+        },
+      },
+    ],
+  },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.NODE_ENV': JSON.stringify(
+        process.env.NODE_ENV || 'development'
+      ),
       'process.env.XOD_HM_DEF': JSON.stringify(process.env.XOD_HM_DEF || false),
 
-      'process.env.XOD_HOSTNAME': JSON.stringify(process.env.XOD_HOSTNAME || 'xod.io'),
+      'process.env.XOD_HOSTNAME': JSON.stringify(
+        process.env.XOD_HOSTNAME || 'xod.io'
+      ),
       'process.env.XOD_SITE_DOMAIN': JSON.stringify('https://xod.io/'),
       'process.env.XOD_FORUM_DOMAIN': JSON.stringify('https://forum.xod.io/'),
       'process.env.XOD_UTM_SOURCE': JSON.stringify('ide'),

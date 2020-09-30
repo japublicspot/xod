@@ -2,9 +2,11 @@ import path from 'path';
 import * as R from 'ramda';
 import { Maybe } from 'ramda-fantasy';
 import { resolvePath } from 'xod-fs';
-import isDevelopment from 'electron-is-dev';
+// import isDevelopment from 'electron-is-dev';
 
-export const IS_DEV = isDevelopment || process.env.NODE_ENV === 'development';
+// TODO: https://github.com/sindresorhus/electron-is-dev/issues/24
+// export const IS_DEV = isDevelopment || process.env.NODE_ENV === 'development';
+export const IS_DEV = true;
 
 // for IPC. see https://electron.atom.io/docs/api/remote/#remote-objects
 // if we don't do this, we get empty objects on the other side instead of errors
@@ -67,6 +69,7 @@ export const getFilePathToOpen = app => {
  */
 export const getResourcesRoot = () => {
   if (IS_DEV) {
+    // TODO: check if this is not broken in v10
     return process.type === 'renderer'
       ? __dirname
       : path.resolve(__dirname, '..');

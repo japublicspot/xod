@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { HotKeys } from 'react-hotkeys';
 import EventListener from 'react-event-listener';
-import isDevelopment from 'electron-is-dev';
+// https://github.com/sindresorhus/electron-is-dev/issues/24
+// import isDevelopment from 'electron-is-dev';
 import { ipcRenderer, remote as remoteElectron, shell } from 'electron';
 
 import client from 'xod-client';
@@ -80,9 +81,12 @@ import { checkArduinoDependencies } from '../../arduinoDependencies/runners';
 
 import { formatErrorMessage, formatLogError } from '../formatError';
 
+// Uncaught TypeError: Cannot read property 'app' of undefined
 const { app, dialog, Menu } = remoteElectron;
 const DEFAULT_CANVAS_WIDTH = 800;
 const DEFAULT_CANVAS_HEIGHT = 600;
+
+const isDevelopment = true; // TODO, see https://github.com/sindresorhus/electron-is-dev/issues/24#issuecomment-692379137
 
 const defaultState = {
   size: client.getViewableSize(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT),

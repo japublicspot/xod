@@ -111,6 +111,8 @@ function createWindow() {
     backgroundColor: '#FFF',
     webPreferences: {
       partition: 'persist:main',
+      nodeIntegration: true,
+      enableRemoteModule: true,
     },
   });
 
@@ -191,19 +193,20 @@ const subscribeToRemoteAction = (processName, remoteAction) => {
 configureAutoUpdater(autoUpdater, log);
 
 const onReady = () => {
-  if (IS_DEV) {
-    require('devtron').install(); // eslint-disable-line global-require
+  // https://github.com/electron-userland/devtron/issues/111
+  // if (IS_DEV) {
+  //   require('devtron').install(); // eslint-disable-line global-require
 
-    const {
-      default: installExtension,
-      REACT_DEVELOPER_TOOLS,
-      REDUX_DEVTOOLS,
-    } = require('electron-devtools-installer'); // eslint-disable-line global-require
+  //   const {
+  //     default: installExtension,
+  //     REACT_DEVELOPER_TOOLS,
+  //     REDUX_DEVTOOLS,
+  //   } = require('electron-devtools-installer'); // eslint-disable-line global-require
 
-    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]).catch(
-      err => console.log(err) // eslint-disable-line no-console
-    );
-  }
+  //   installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS]).catch(
+  //     err => console.log(err) // eslint-disable-line no-console
+  //   );
+  // }
   settings.setDefaults();
 
   subscribeToRemoteAction(EVENTS.SAVE_ALL, WA.subscribeToSaveAll(store));

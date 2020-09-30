@@ -30,13 +30,12 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
 
 const pkgpath = (pkgDir, subpath) => path.join(pkgDir, subpath);
-const assetsPath = fs.realpathSync(findup('node_modules/xod-client/src/core/assets'));
+const assetsPath = fs.realpathSync(
+  findup('node_modules/xod-client/src/core/assets')
+);
 const fontAwesomePath = fs.realpathSync(findup('node_modules/font-awesome'));
 
-const IS_DEV = (
-  !process.env.NODE_ENV ||
-  process.env.NODE_ENV === 'development'
-);
+const IS_DEV = !process.env.NODE_ENV || process.env.NODE_ENV === 'development';
 
 module.exports = pkgDir => ({
   devtool: 'source-map',
@@ -136,18 +135,20 @@ module.exports = pkgDir => ({
       { from: findup('node_modules/xod-client/src/core/assets/index.html') },
     ]),
   ].concat(
-    IS_DEV ? [] : [
-      new UglifyJSPlugin({
-        sourceMap: true,
-        parallel: true,
-        uglifyOptions: {
-          mangle: false,
-          toplevel: true,
-          output: {
-            webkit: true,
-          },
-        },
-      }),
-    ]
+    IS_DEV
+      ? []
+      : [
+          new UglifyJSPlugin({
+            sourceMap: true,
+            parallel: true,
+            uglifyOptions: {
+              mangle: false,
+              toplevel: true,
+              output: {
+                webkit: true,
+              },
+            },
+          }),
+        ]
   ),
 });
