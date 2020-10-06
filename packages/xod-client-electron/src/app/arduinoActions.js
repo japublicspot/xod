@@ -57,12 +57,12 @@ export const saveTargetBoard = board =>
 export const listPorts = () =>
   xd
     .listPorts()
-    .then(R.sort(R.descend(R.prop('comName'))))
+    .then(R.sort(R.descend(R.prop('path'))))
     .catch(rejectWithCode(ERROR_CODES.NO_PORTS_FOUND));
 
 // :: Port -> [Port] -> Boolean
 const hasPort = R.curry((port, ports) =>
-  R.compose(R.gt(R.__, -1), R.findIndex(R.propEq('comName', port.comName)))(
+  R.compose(R.gt(R.__, -1), R.findIndex(R.propEq('path', port.path)))(
     ports
   )
 );
@@ -76,7 +76,7 @@ export const checkPort = port =>
   listPorts()
     .then(
       R.ifElse(hasPort(port), R.always(port), ports => {
-        throw Object.assign(new Error(`Port ${port.comName} not found`), {
+        throw Object.assign(new Error(`Port ${port.path} not found`), {
           port,
           ports,
         });
@@ -109,7 +109,7 @@ const openPortForReading = async (port, disableRts, onData, onClose) => {
     );
   }
 
-  const portName = R.prop('comName', port);
+  const portName = R.prop('path', port);
 
   return delay(400).then(() =>
     xd.openAndReadPort(portName, disableRts, onData, onClose)
