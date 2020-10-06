@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { HotKeys } from 'react-hotkeys';
 import EventListener from 'react-event-listener';
-// https://github.com/sindresorhus/electron-is-dev/issues/24
-// import isDevelopment from 'electron-is-dev';
 import { ipcRenderer, remote as remoteElectron, shell } from 'electron';
 
 import client from 'xod-client';
@@ -62,7 +60,7 @@ import {
   proceedPackageUpgrade,
 } from '../../arduinoDependencies/actions';
 import { loadWorkspacePath } from '../../app/workspaceActions';
-import { getPathToBundledWorkspace } from '../../app/utils';
+import { IS_DEV, getPathToBundledWorkspace } from '../../app/utils';
 
 import getLibraryNames from '../../arduinoDependencies/getLibraryNames';
 
@@ -85,8 +83,6 @@ import { formatErrorMessage, formatLogError } from '../formatError';
 const { app, dialog, Menu } = remoteElectron;
 const DEFAULT_CANVAS_WIDTH = 800;
 const DEFAULT_CANVAS_HEIGHT = 600;
-
-const isDevelopment = true; // TODO, see https://github.com/sindresorhus/electron-is-dev/issues/24#issuecomment-692379137
 
 const defaultState = {
   size: client.getViewableSize(DEFAULT_CANVAS_WIDTH, DEFAULT_CANVAS_HEIGHT),
@@ -222,7 +218,7 @@ class App extends client.App {
     // autoUpdater
     subscribeAutoUpdaterEvents(ipcRenderer, this);
 
-    if (isDevelopment) {
+    if (IS_DEV) {
       // Besause we can't control file dialogs in autotests
       ipcRenderer.on(TRIGGER_SAVE_AS, projectPath => {
         if (!projectPath) {
@@ -805,7 +801,7 @@ class App extends client.App {
         Menu.setApplicationMenu(menu);
         // for testing purposes
         // see https://github.com/electron/spectron/issues/21
-        if (isDevelopment) {
+        if (IS_DEV) {
           subscribeToTriggerMainMenuRequests(ipcRenderer, finalTemplate);
         }
       },

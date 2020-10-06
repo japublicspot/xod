@@ -113,6 +113,9 @@ function createWindow() {
       partition: 'persist:main',
       nodeIntegration: true,
       enableRemoteModule: true,
+      additionalArguments: [
+        IS_DEV ? 'ELECTRON_IS_DEV' : 'ELECTRON_IS_PACKAGED',
+      ],
     },
   });
 
@@ -127,7 +130,13 @@ function createWindow() {
   // Open the DevTools.
   // win.webContents.openDevTools();
 
-  contextMenu({ window: win });
+  contextMenu({
+    window: win,
+    // by default `electron-context-menu` uses
+    // `electron-is-dev` for autodetecting this,
+    // but it no longer works in Electron v10
+    showInspectElement: IS_DEV,
+  });
 
   const { webContents } = win;
 
