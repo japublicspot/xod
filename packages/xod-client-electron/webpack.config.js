@@ -28,7 +28,7 @@ module.exports = merge.smart(getBaseConfig(__dirname), {
   module: {
     rules: [
       {
-        include: [/node_modules\/mkdirp/],
+        include: [/node_modules(\\|\/)mkdirp/],
         test: /\.js$/,
         loader: 'babel-loader',
         options: {
