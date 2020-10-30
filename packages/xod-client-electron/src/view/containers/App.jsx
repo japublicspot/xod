@@ -441,12 +441,11 @@ class App extends client.App {
         {
           properties: ['openFile'],
           filters: getOpenDialogFileFilters(),
-        },
-        filePaths => {
+        }
+      ).then(({ filePaths })=> {
           if (!filePaths) return;
           ipcRenderer.send(EVENTS.LOAD_PROJECT, filePaths[0]);
-        }
-      );
+      });
     });
   }
 
@@ -512,8 +511,8 @@ class App extends client.App {
         'Save As...',
         this.suggestProjectFilePath(),
         'Save'
-      ),
-      filePath => {
+      )
+    ).then(({ filePath }) => {
         if (!filePath) return;
         this.saveAs(filePath, true, true)
           .then(onAfterSave)
@@ -527,8 +526,8 @@ class App extends client.App {
         'Save Copy As...',
         this.suggestProjectFilePath(),
         'Save a Copy'
-      ),
-      filePath => {
+      )
+    ).then(({ filePath }) => {
         if (!filePath) return;
         this.saveAs(filePath, false, false).catch(noop);
       }
@@ -545,21 +544,21 @@ class App extends client.App {
       return;
     }
 
-    const clickedButtonId = dialog.showMessageBox({
+    dialog.showMessageBox({
       message: 'Save changes to the current project before closing?',
       detail: 'If you don’t save the project, changes will be lost',
       type: 'warning',
       buttons: ['Save', 'Discard', 'Cancel'],
       cancelId: 2,
+    }).then(({ response }) => {
+      if (response === 0) {
+        // Save
+        this.onSave(onConfirm);
+      } else if (response === 1) {
+        // Discard
+        onConfirm();
+      }
     });
-
-    if (clickedButtonId === 0) {
-      // Save
-      this.onSave(onConfirm);
-    } else if (clickedButtonId === 1) {
-      // Discard
-      onConfirm();
-    }
   }
 
   onUploadConfigClose() {
