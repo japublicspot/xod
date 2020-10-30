@@ -117,7 +117,7 @@ jobs:
 
   verify-macos:
     macos:
-      xcode: "10.0.0"
+      xcode: "11.2.1"
     environment:
       YARN_CACHE_FOLDER: /tmp/yarn-cache
       XOD_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
@@ -190,7 +190,7 @@ jobs:
 
   dist-macos:
     macos:
-      xcode: "10.0.0"
+      xcode: "11.2.1"
     environment:
       NODE_ENV: production
       XOD_ARDUINO_CLI: /tmp/arduino-cli/arduino-cli
