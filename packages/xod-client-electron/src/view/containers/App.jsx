@@ -442,8 +442,9 @@ class App extends client.App {
           properties: ['openFile'],
           filters: getOpenDialogFileFilters(),
         }
-      ).then(({ filePaths })=> {
-          if (!filePaths) return;
+      ).then(({ canceled, filePaths })=> {
+          if (canceled) return;
+
           ipcRenderer.send(EVENTS.LOAD_PROJECT, filePaths[0]);
       });
     });
@@ -512,8 +513,9 @@ class App extends client.App {
         this.suggestProjectFilePath(),
         'Save'
       )
-    ).then(({ filePath }) => {
-        if (!filePath) return;
+    ).then(({ canceled, filePath }) => {
+        if (canceled) return;
+
         this.saveAs(filePath, true, true)
           .then(onAfterSave)
           .catch(noop);
@@ -527,8 +529,9 @@ class App extends client.App {
         this.suggestProjectFilePath(),
         'Save a Copy'
       )
-    ).then(({ filePath }) => {
-        if (!filePath) return;
+    ).then(({ canceled, filePath }) => {
+        if (canceled) return;
+
         this.saveAs(filePath, false, false).catch(noop);
       }
     );
