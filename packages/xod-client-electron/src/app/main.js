@@ -252,6 +252,9 @@ const onReady = () => {
     )
   );
   ipcMain.on(EVENTS.DEBUG_SERIAL_SEND, (event, str) => {
+    console.log(str);
+    console.log(debugPort);
+
     if (!debugPort || !debugPort.write) return;
 
     debugPort.write(str);

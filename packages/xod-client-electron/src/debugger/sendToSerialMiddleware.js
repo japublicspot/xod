@@ -15,6 +15,8 @@ export default ({ getState }) => next => action => {
     action.type === client.LINE_SENT_TO_SERIAL &&
     (client.isSerialDebugRunning(state) || client.isSerialSessionRunning(state))
   ) {
+
+    console.log('sending line to serial', action.payload);
     ipcRenderer.send(DEBUG_SERIAL_SEND, action.payload);
   }
 
@@ -49,9 +51,11 @@ export default ({ getState }) => next => action => {
         R.compose(R.propOr(value, R.__, globals), R.tail)
       )(value);
 
+      const tweakMessage = formatTweakMessage(nodeType, debuggerNodeId, valueToSend);
+      console.log('sending tweak message to serial', tweakMessage);
       ipcRenderer.send(
         DEBUG_SERIAL_SEND,
-        formatTweakMessage(nodeType, debuggerNodeId, valueToSend)
+        tweakMessage
       );
     }
   }

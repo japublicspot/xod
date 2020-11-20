@@ -98,9 +98,11 @@ export const openPort = (portName, opts = {}) =>
     const SerialPort = require('serialport');
 
     try {
-      const port = new SerialPort(portName, opts);
-      port.on('error', reject);
-      port.on('open', () => resolve(port));
+      const port = new SerialPort(portName, opts, err => 
+        err ? reject(err) : resolve(port)
+      );
+      // port.on('error', reject);
+      // port.on('open', () => resolve(port));
     } catch (err) {
       reject(err);
     }
@@ -109,10 +111,7 @@ export const openPort = (portName, opts = {}) =>
 // :: Port -> Promise Port Error
 export const closePort = port =>
   new Promise((resolve, reject) => {
-    port.close(err => {
-      if (err) reject(err);
-      resolve(port);
-    });
+    port.close(err => err ? reject(err) : resolve(port));
   });
 
 // :: PortName -> Boolean -> (String -> *) -> (* -> *) -> Promise Port Error
@@ -136,6 +135,7 @@ export const openAndReadPort = (portName, disableRts, onData, onClose) => {
 
       parser.on('data', onData);
       port.on('close', onClose);
+      port.on('error', err => console.dir(err, { depth: null }));
     })
   );
 };
