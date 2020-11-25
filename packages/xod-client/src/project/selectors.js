@@ -582,7 +582,7 @@ export const getRenderableSelection = createMemoizedSelector(
   [R.equals, R.equals, R.equals, R.equals],
   (renderableNodes, renderableLinks, renderableComments, selection) => {
     const renderables = {
-      [SELECTION_ENTITY_TYPE.NODE]: renderableNodes,
+      [SELECTION_ENTITY_TYPE.NODE]: undefined, //renderableNodes,
       [SELECTION_ENTITY_TYPE.LINK]: renderableLinks,
       [SELECTION_ENTITY_TYPE.COMMENT]: renderableComments,
     };
