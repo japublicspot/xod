@@ -10,6 +10,8 @@ import composeMiddlewares from '../middlewares';
 import { loadPanelSettings } from '../../editor/utils';
 import { setSidebarLayout } from '../../editor/actions';
 
+import Catcher from './Catcher';
+
 export default class Root extends React.Component {
   constructor(props) {
     super(props);
@@ -26,7 +28,11 @@ export default class Root extends React.Component {
   }
 
   render() {
-    return <Provider store={this.store}>{this.props.children}</Provider>;
+    return (
+      <Provider store={this.store}>
+        <Catcher>{this.props.children}</Catcher>
+      </Provider>
+    );
   }
 }
 
